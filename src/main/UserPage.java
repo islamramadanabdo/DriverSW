@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import database.DriverDatabase;
 import database.TripDatabase;
+import database.UsersDatabase;
 import database.database_response;
 
 import static java.lang.System.out;
@@ -13,19 +14,29 @@ import static java.lang.System.out;
 public class UserPage
 {
     Scanner input = new Scanner(System.in);
+    UsersDatabase user_database=new UsersDatabase();
     TripDatabase trip_database=new TripDatabase();
     DriverDatabase driver_database=new DriverDatabase();
     
     public void requestRide(String UserID)
     {
     	trip new_trip=new trip();
-        out.println("request a Ride ");
-        out.println("Enter source area`s name");
-        new_trip.setSourcee(input.next());
-        out.println("Enter destination area`s name");
-        new_trip.setDistination(input.next());
-        new_trip.setUserID(UserID);
-        trip_database.create_trip(new_trip);
+    	new_trip.create_trip(UserID);
+    }
+    
+    public void view_driver_profile()
+    {
+    	System.out.println("Enter the ID of the driver you  want to view his profile");
+    	String DriverID=input.nextLine();
+    	User current_driver=new User();
+    	rate current_driver_rate=new rate();
+    	Double driver_rate=current_driver_rate.calc_rate(DriverID);
+    	current_driver=driver_database.get_driver(DriverID);
+    	System.out.println("Driver ID : "+current_driver.getUserID());
+		System.out.println("Driver name : "+current_driver.getUsername());
+		System.out.println("Driver Email : "+current_driver.getEmail());
+		System.out.println("Driver Mobile : "+current_driver.getMobile());
+    	System.out.println("Driver Rate : "+ driver_rate);
     }
 public void  rateDriver(String UserID)
 {
@@ -73,4 +84,46 @@ public void  rateDriver(String UserID)
     	}
     	
     }
+    
+    public void list_offers(String UserID)
+    {
+    	offer Offer=new offer();
+       database_response response=new database_response();
+    	response=Offer.view_trip_offers(UserID);
+    	if(response.getStatus())
+    	{
+    		System.out.println("Do you want to choose offer? enter 1 to choose, 0 to quit");
+        	int choice=input.nextInt();
+        	input.nextLine();
+        	if(choice==1)
+        	{
+        		System.out.println("Enter the offer ID you want to corfirm");
+        		int offer_id=input.nextInt();
+        		Offer.confirm_offer(offer_id);
+        	}
+        	else
+        	{
+        		return;
+        	}
+    	}
+    	
+    	
+    }
+
+    public void get_offer_notification(offer new_offer) 
+    {
+    	User reciever=new User();
+    	reciever=user_database.get_user_by_id(new_offer.getUserID());
+    	sendingEmails send_notify=new sendingEmails();
+    	try 
+    	{
+				send_notify.send_offer_notification(reciever, new_offer);
+		}
+    	catch (Exception e) 
+    	{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    }
+    
 }

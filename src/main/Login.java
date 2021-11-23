@@ -97,8 +97,10 @@ public class Login
                 {
                     System.out.println("User page");
                     System.out.println("[1] request a Ride");
-                    System.out.println("[2] rate Drivers");
-                    System.out.println("[3] Exit");
+                    System.out.println("[2] List trip offers and confirm offer");
+                    System.out.println("[3] View Driver profile and his rate");
+                    System.out.println("[4] rate Drivers");
+                    System.out.println("[5] Exit");
                     System.out.println("Please Enter your choice ");
                     int adminChoice = input.nextInt();
                     input.nextLine();
@@ -109,14 +111,23 @@ public class Login
                         	 u.requestRide(userID);
                              break;
                         }
-                           
                         case 2:
+                        {
+                        	 u.list_offers(userID);
+                             break;
+                        } 
+                        case 3:
+                        {
+                        	 u.view_driver_profile();
+                             break;
+                        } 
+                        case 4:
                         {
                         	 u.rateDriver(userID);
                              break;
                         }
                            
-                        case 3:
+                        case 5:
                         {
                         	 out.println("GOOD BYE");
                              System.exit(0);	
@@ -135,7 +146,10 @@ public class Login
                     System.out.println("Driver page");
                     System.out.println("[1] add Favorite Area ");
                     System.out.println("[2] list Rating");
-                    System.out.println("[3] Exit");
+                    System.out.println("[3] List all available trips");
+                    System.out.println("[4] List available trips of my favorite areas");
+                    System.out.println("[5] Make offer of specific trip");
+                    System.out.println("[6] Exit");
                     System.out.println("Please Enter your choice ");
                     int adminChoice = input.nextInt();
                     switch (adminChoice)
@@ -151,15 +165,32 @@ public class Login
                         	d.listUserRating(userID);
                             break;
                         }
+                        
                         case 3:
                         {
-                        	 out.println("GOOD BYE");
-                             System.exit(0);
+                        	d.list_all_trips();
+                        	break;
+                        }
+                        case 4:
+                        {
+                        	d.list_favorite_trips(userID);
+                        	break;
+                        }
+                        case 5:
+                        {
+                        	d.make_offer(userID);
+                        	 break;
+                        }
+                        case 6:
+                        {
+                        	out.println("GOOD BYE");
+                            System.exit(0);
                         }
 
                         default:
                         {
                         	System.out.println("Invalid choice!");
+                        	break;
                         }
                            
 

@@ -10,15 +10,85 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import main.User;
+import main.favorite_area;
+import main.offer;
 import main.rate;
+import main.trip;
 
 public class DriverDatabase 
 {
 	
-	public  ArrayList<User> get_all_trips()
+	 public User get_driver(String UserID)
+	 {
+		 User current_driver=new User();
+		  try {
+			   
+	            Class.forName("com.mysql.jdbc.Driver");
+	            String url = "jdbc:mysql://localhost:3306/advancedSW";
+	            String user = "root";
+	            String password = "root";
+	            Connection Con = null;
+	            Con = DriverManager.getConnection(url, user, password);
+
+	            String sql = "SELECT * FROM user WHERE userID = ?";
+	            PreparedStatement statement = Con.prepareStatement(sql);
+	            statement.setString(1, UserID);
+	            ResultSet result = statement.executeQuery();
+	            while (result.next()) 
+	            {
+	                current_driver.setUserID(result.getInt("UserID"));
+	                current_driver.setUsername(result.getString("username"));
+	                current_driver.setEmail(result.getString("email"));
+	                current_driver.setMobile(result.getString("mobile"));
+	                current_driver.setLicense(result.getString("license"));
+	                current_driver.setNationalID(result.getString("nationalID"));
+	                current_driver.setApproved(result.getString("approved"));
+	                current_driver.setRole(result.getString("role"));
+	               
+
+	            }
+	        } catch (ClassNotFoundException | SQLException ex) {
+	            //ex.printStackTrace();
+	            //out.println("not connected");
+	        	System.out.println(ex.getMessage());
+	        }
+		  return current_driver;
+	 }
+	public ArrayList<favorite_area>get_favorite_areas(String UserID)
 	{
-		return null;
+		ArrayList<favorite_area>all_favorite=new ArrayList<favorite_area>();
+		  try {
+			   
+	            Class.forName("com.mysql.jdbc.Driver");
+	            String url = "jdbc:mysql://localhost:3306/advancedSW";
+	            String user = "root";
+	            String password = "root";
+	            Connection Con = null;
+	            Con = DriverManager.getConnection(url, user, password);
+
+	            String sql = "SELECT * FROM favorite WHERE UserID = ?";
+	            PreparedStatement statement = Con.prepareStatement(sql);
+	            statement.setString(1, UserID);
+	            ResultSet result = statement.executeQuery();
+	            while (result.next()) 
+	            {
+	                favorite_area area=new favorite_area();
+	            	area.setDriver_id(result.getInt("UserID"));
+	            	area.setLocation(result.getString("area"));
+	                
+	                all_favorite.add(area);
+	               
+
+	            }
+	        } catch (ClassNotFoundException | SQLException ex) {
+	            //ex.printStackTrace();
+	            //out.println("not connected");
+	        	System.out.println(ex.getMessage());
+	        }
+		  return all_favorite;
 	}
+	
+
 	public database_response add_fev_area(String UserID,String area)
 	{
 		database_response response=new database_response();
