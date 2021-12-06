@@ -102,11 +102,48 @@ public class driverActivities extends Activities {
         }
     }
 
-    public void suggestPrice(Trip t) {
-
+    public void make_offer(String UserID)
+    {
+    	offer new_offer=new offer();
+        
+    	Trip current_trip=new Trip();
+        
+    	current_trip.view_all();
+    	System.out.println("Enter trip ID you want to offer");
+    	int trip_id=input.nextInt();
+    	input.nextLine();
+    	System.out.println("Enter the money amount you want to offer");
+    	Double money =input.nextDouble();
+    	input.nextLine();
+    	Boolean status=new_offer.make_offer(UserID,trip_id,money);
+    	if(status)
+    	{
+    		System.out.println("You will recieve an email if the user accepts.");
+    	}
+    	else
+    	{
+    		System.out.println("Something went wrong, please try later!");
+    	}
+    	
     }
 
-    public void notifyUser(user u) {
-
+      
+    public void get_trip_notification(Trip new_trip) 
+    {
+     
+        
+    	ArrayList <driver>all_drivers=new ArrayList<driver>();
+       
+    	all_drivers=driver_database.get_all_drivers("1");
+    	sendingEmail send_notify=new sendingEmail();
+    	for(int i=0;i<all_drivers.size();i++)
+    	{
+    		try {
+				send_notify.send_trip_notification(all_drivers.get(i) ,new_trip);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     }
 }

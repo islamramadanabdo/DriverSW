@@ -43,7 +43,7 @@ public class Main {
                     break;
                 }
                 case 3: {
-                    Person P = new user();
+                    Person P = new driver();
                     P.login();
                     break;
 

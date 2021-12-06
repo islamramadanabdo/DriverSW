@@ -20,7 +20,38 @@ public class DriverDatabase {
         return null;
     }
 
-     public ArrayList<favorite_area> get_favorite_areas(String UserID) {
+    public driver get_driver(String UserID) {
+        driver current_driver = new driver();
+        java.sql.Connection conn = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+
+            conn = (java.sql.Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/advancedsw", "root", "");
+
+            String sql = "SELECT * FROM driver WHERE userID = ?";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, UserID);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                current_driver.setId(result.getInt("UserID"));
+                current_driver.setUsername(result.getString("username"));
+                current_driver.setEmail(result.getString("email"));
+                current_driver.setPhone(result.getString("mobile"));
+                current_driver.setDrivingLicence(result.getString("license"));
+                current_driver.setNationalID(result.getString("nationalID"));
+                current_driver.setApproved(result.getString("approved"));
+                current_driver.setRole(result.getString("role"));
+
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            //ex.printStackTrace();
+            //out.println("not connected");
+            System.out.println(ex.getMessage());
+        }
+        return current_driver;
+    }
+
+    public ArrayList<favorite_area> get_favorite_areas(String UserID) {
         ArrayList<favorite_area> all_favorite = new ArrayList<favorite_area>();
         java.sql.Connection conn = null;
         try {
@@ -48,7 +79,6 @@ public class DriverDatabase {
         return all_favorite;
     }
 
-    
     public database_response add_fev_area(String UserID, String area) {
         database_response response = new database_response();
         java.sql.Connection conn = null;

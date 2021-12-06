@@ -96,7 +96,7 @@ public class UsersDatabase {
 
             conn = (java.sql.Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/advancedsw", "root", "");
 
-            String sql = "SELECT * FROM user WHERE UserID = ? ";
+            String sql = "SELECT * FROM driver WHERE UserID = ? ";
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, UserID);
             ResultSet result = statement.executeQuery();

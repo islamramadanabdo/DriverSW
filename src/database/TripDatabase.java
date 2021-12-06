@@ -129,4 +129,55 @@ public class TripDatabase {
         return all_trips;
     }
 
+    public ArrayList<Trip> get_user_trips(String UserID) {
+        ArrayList<Trip> all_trips = new ArrayList<Trip>();
+        java.sql.Connection conn = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+
+            conn = (java.sql.Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/advancedsw", "root", "");
+
+            String query = " SELECT * FROM trip WHERE userID= ? And confirmed!= 1";
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setString(1, UserID);
+            ResultSet result = preparedStmt.executeQuery();
+            while (result.next()) {
+                Trip current_trip = new Trip();
+                current_trip.setSourcee(result.getString("source"));
+                current_trip.setDistination(result.getString("destination"));
+                current_trip.setTripID(result.getInt("tripID"));
+                current_trip.setUserID(Integer.toString(result.getInt("userID")));
+                all_trips.add(current_trip);
+            }
+
+            conn.close();
+        } catch (ClassNotFoundException | SQLException ex) {
+            //ex.printStackTrace();
+            out.print("not connected");
+        }
+
+        return all_trips;
+    }
+
+    public database_response confirm_trip(int trip_id) {
+        database_response response = new database_response();
+        java.sql.Connection conn = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+
+            conn = (java.sql.Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/advancedsw", "root", "");
+
+            String query = " Update trip set confirmed='1' WHERE tripID= ?";
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setInt(1, trip_id);
+            response.setStatus(preparedStmt.execute());
+
+            conn.close();
+        } catch (ClassNotFoundException | SQLException ex) {
+            System.out.println(ex.getMessage());
+            response.setStatus(false);
+        }
+        return response;
+    }
+
 }
