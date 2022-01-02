@@ -36,4 +36,6 @@ public class DriverController {
     public ArrayList<favorite_area> list_favorite_trips(@RequestBody  User user){
             return driver_services.list_favorite_trips(user);
     }
+
+
 }
